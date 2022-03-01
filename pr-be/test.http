@@ -1,0 +1,54 @@
+# EVENTS
+
+###
+GET http://localhost:7005/events HTTP/1.1
+
+###
+GET http://localhost:7005/events/c9f6305e-2ae1-41aa-9b1a-da651c2417fb HTTP/1.1
+
+### Not Found
+GET http://localhost:7005/events/11111111-2222-3333-4444-555555555555 HTTP/1.1
+
+###
+POST http://localhost:7005/events HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "REST-event"
+}
+
+###
+DELETE http://localhost:7005/events/c9f6305e-2ae1-41aa-9b1a-da651c2417fb HTTP/1.1
+
+
+# USERS
+
+###
+GET http://localhost:7005/users HTTP/1.1
+
+###
+GET http://localhost:7005/users/0ab8c67b-34ab-48c9-9ade-0da5975ea8ab HTTP/1.1
+
+### Not Found
+GET http://localhost:7005/users/11111111-2222-3333-4444-555555555555 HTTP/1.1
+
+###
+POST http://localhost:7005/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "REST Janko-Hrasko",
+  "dispositions": ["cooking", "audio", "video", "driving"]
+}
+
+###
+DELETE http://localhost:7005/events/0ab8c67b-34ab-48c9-9ade-0da5975ea8ab HTTP/1.1
+
+
+# REFERENCE DATA
+
+###
+GET http://localhost:7005/ref_data HTTP/1.1
+
+###
+GET http://localhost:7005/ref_data/all HTTP/1.1
