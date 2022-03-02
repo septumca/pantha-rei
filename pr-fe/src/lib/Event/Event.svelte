@@ -14,7 +14,7 @@ import type { EventData } from "src/types/prtypes.type";
 
 <main>
   <div class="card">
-    <button on:click={onDelete} class="delete-button">Delete</button>
+    <button on:click={onDelete} class="delete-button">🗑️ Delete</button>
     {data.name}
   </div>
 </main>
@@ -26,7 +26,6 @@ import type { EventData } from "src/types/prtypes.type";
     top: 2px;
     right: 2px;
     display: flex;
-    padding: 0px;
     cursor: pointer;
   }
 

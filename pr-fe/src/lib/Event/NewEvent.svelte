@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEvent } from "../../utils/services";
   import { eventStore } from '../../utils/stores';
-import type { EventData } from "src/types/prtypes.type";
+  import type { EventData } from "src/types/prtypes.type";
 
   let name: string = "";
 
@@ -17,7 +17,7 @@ import type { EventData } from "src/types/prtypes.type";
     <input placeholder="Event name" bind:value={name} >
   </div>
   <button on:click={onCreate} disabled={name === ""}>
-    <div>Create new event</div>
+    <div>🗓️✔️ Create new event</div>
   </button>
 
 </div>
