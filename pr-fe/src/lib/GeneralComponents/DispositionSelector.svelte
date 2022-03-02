@@ -26,15 +26,15 @@
       bind:value={newDisposition}
     />
     <button on:click={onAddDisposition} disabled={newDisposition === ""}>
-      <div>✔️ Add new disposition</div>
+      <div>✔️ Add</div>
     </button>
   </div>
   <div>
     {#each dispositions as d, i}
       <div class="disposition">
         <span>{d}</span>
-        <button on:click={removeDispositionAtIndex(i)}>
-          <div>❌ Remove</div>
+        <button class="remove-button" on:click={removeDispositionAtIndex(i)}>
+          <div>❌</div>
         </button>
       </div>
 
@@ -44,8 +44,13 @@
 
 
 <style>
+  .remove-button {
+    border-radius: 16px;
+    line-height: 17px;
+  }
+
   .disposition {
     display: inline;
-    padding-left: 8px;
+    margin-left: 8px;
   }
 </style>

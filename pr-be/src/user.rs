@@ -1,6 +1,6 @@
 use axum::{Json, extract::Path};
 use serde::{Serialize, Deserialize};
-use mongodb::{bson::{doc, Uuid}};
+use mongodb::{bson::{doc, Uuid}, options::UpdateModifications};
 
 use crate::{error, utils, refdata::Dispositions};
 
@@ -29,12 +29,22 @@ impl From<CreateUserData> for User {
   }
 }
 
+impl Into<UpdateModifications> for CreateUserData {
+  fn into(self) -> UpdateModifications {
+    UpdateModifications::Document(doc! { "$set": { "name": self.name, "dispositions": self.dispositions }})
+  }
+}
+
 pub async fn create(Json(data): Json<CreateUserData>) -> Result<Json<User>, error::PrError> {
   Ok::<Json<User>, error::PrError>(Json(utils::create::<CreateUserData, User>(COLL_NAME, data).await?))
 }
 
 pub async fn delete(Path(id): Path<String>) -> Result<(), error::PrError> {
   Ok::<(), error::PrError>(utils::delete::<User>(COLL_NAME, id).await?)
+}
+
+pub async fn put(Path(id): Path<String>, Json(data): Json<CreateUserData>) -> Result<(), error::PrError> {
+  Ok::<(), error::PrError>(utils::put::<CreateUserData, User>(COLL_NAME, id, data).await?)
 }
 
 pub async fn read(Path(id): Path<String>) -> Result<Json<User>, error::PrError> {

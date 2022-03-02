@@ -10,6 +10,7 @@
   import { Router, Link, Route } from "svelte-navigator";
   import Login from "./lib/Login/Login.svelte";
   import PrivateRoute from "./lib/GeneralComponents/PrivateRoute.svelte";
+  import Home from "./lib/Home/Home.svelte";
 
   onMount(async () => {
     const fe: Promise<Array<EventData>> = getEvents();
@@ -37,7 +38,7 @@
       </Route>
 
       <PrivateRoute path="/">
-        HOME
+        <Home />
       </PrivateRoute>
       <PrivateRoute path="/events">
         <div class="container">
@@ -83,6 +84,7 @@
   }
 
   :global(button) {
+    cursor: pointer;
     background-color: rgb(0, 134, 187);
     transition: background-color 0.3s;
     border: none;

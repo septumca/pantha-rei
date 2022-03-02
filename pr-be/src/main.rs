@@ -1,6 +1,6 @@
 use axum::{
     http::Method,
-    routing::{get, post, delete},
+    routing::{get, post, delete, put},
     Router,
 };
 use tower_http::cors::{Any, CorsLayer};
@@ -20,7 +20,7 @@ mod refdata;
 async fn main() {
     tracing_subscriber::fmt::init();
     let cors = CorsLayer::new()
-        .allow_methods(vec![Method::GET, Method::POST, Method::DELETE])
+        .allow_methods(vec![Method::GET, Method::POST, Method::DELETE, Method::PUT])
         .allow_headers(Any)
         .allow_origin(Any);
 
@@ -32,6 +32,7 @@ async fn main() {
         .route("/users", post(user::create))
         .route("/users/:id", delete(user::delete))
         .route("/users/:id", get(user::read))
+        .route("/users/:id", put(user::put))
         .route("/users", get(user::read_all))
         .route("/ref_data", get(refdata::read))
         .route("/ref_data/all", get(refdata::read_all))

@@ -1,3 +1,5 @@
+import type { UserData } from '../types/prtypes.type';
+
 const API: string = "http://localhost:7005";
 const EVENT_API: string = `${API}/events`;
 const USER_API: string = `${API}/users`;
@@ -19,6 +21,13 @@ const GET_OPTIONS: Options = {
 
 const POST_OPTIONS: Options = {
   method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  }
+}
+
+const PUT_OPTIONS: Options = {
+  method: "PUT",
   headers: {
     "Content-Type": "application/json"
   }
@@ -52,6 +61,10 @@ export const createUser = async (name: string, dispositions: Array<string>) => {
 
 export const deleteUser = async (id: string) => {
   await fetch(`${USER_API}/${id}`, DELETE_OPTIONS);
+}
+
+export const updateUser = async (id: string, data: UserData) => {
+  await fetch(`${USER_API}/${id}`, { ...PUT_OPTIONS, body: JSON.stringify({ name: data.name, dispositions: data.dispositions })});
 }
 
 export const getUsers = async () => {
