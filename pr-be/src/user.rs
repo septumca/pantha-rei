@@ -8,9 +8,9 @@ const COLL_NAME: &str = "users";
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct User {
-  _id: Uuid,
-  name: String,
-  dispositions: Dispositions
+  pub _id: Uuid,
+  pub name: String,
+  pub dispositions: Dispositions
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -18,6 +18,8 @@ pub struct CreateUserData {
   name: String,
   dispositions: Dispositions
 }
+
+pub type UpdateUserData = CreateUserData;
 
 impl From<CreateUserData> for User {
   fn from(ud: CreateUserData) -> Self {
@@ -29,9 +31,9 @@ impl From<CreateUserData> for User {
   }
 }
 
-impl Into<UpdateModifications> for CreateUserData {
-  fn into(self) -> UpdateModifications {
-    UpdateModifications::Document(doc! { "$set": { "name": self.name, "dispositions": self.dispositions }})
+impl From<UpdateUserData> for UpdateModifications {
+  fn from(d: UpdateUserData) -> Self {
+    UpdateModifications::Document(doc! { "$set": { "name": d.name, "dispositions": d.dispositions }})
   }
 }
 
@@ -43,8 +45,8 @@ pub async fn delete(Path(id): Path<String>) -> Result<(), error::PrError> {
   Ok::<(), error::PrError>(utils::delete::<User>(COLL_NAME, id).await?)
 }
 
-pub async fn put(Path(id): Path<String>, Json(data): Json<CreateUserData>) -> Result<(), error::PrError> {
-  Ok::<(), error::PrError>(utils::put::<CreateUserData, User>(COLL_NAME, id, data).await?)
+pub async fn put(Path(id): Path<String>, Json(data): Json<UpdateUserData>) -> Result<(), error::PrError> {
+  Ok::<(), error::PrError>(utils::put::<UpdateUserData, User>(COLL_NAME, id, data).await?)
 }
 
 pub async fn read(Path(id): Path<String>) -> Result<Json<User>, error::PrError> {

@@ -5,6 +5,7 @@ const EVENT_API: string = `${API}/events`;
 const USER_API: string = `${API}/users`;
 const REFDATA_API: string = `${API}/ref_data`;
 
+
 type Options = {
   method: string,
   headers: {
@@ -43,6 +44,14 @@ const DELETE_OPTIONS: Options = {
 export const createEvent = async (name: string) => {
   let r = await fetch(EVENT_API, { ...POST_OPTIONS, body: JSON.stringify({ name })});
   return r.json();
+}
+
+export const addUserToEvent = async (id: string, data: UserData) => {
+  await fetch(`${EVENT_API}/${id}/participants`, { ...POST_OPTIONS, body: JSON.stringify(data)});
+}
+
+export const removeUserFromEvent = async (eventId: string, userId: string) => {
+  await fetch(`${EVENT_API}/${eventId}/participants/${userId}`, DELETE_OPTIONS);
 }
 
 export const deleteEvent = async (id: string) => {

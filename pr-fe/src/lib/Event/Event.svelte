@@ -1,21 +1,42 @@
 <script lang="ts">
-import type { EventData } from "src/types/prtypes.type";
-
+  import type { EventData } from "../../types/prtypes.type";
+  import { addUserToEvent, removeUserFromEvent } from "../../utils/services";
   import { deleteEvent } from "../../utils/services";
-  import { eventStore } from '../../utils/stores';
+  import { eventStore, loggedInUserStore } from '../../utils/stores';
 
   export let data: EventData;
 
+  $: includeUser = $loggedInUserStore !== null && data.participants.some(d => d._id === $loggedInUserStore._id);
+
   const onDelete = async () => {
-    const _r = await deleteEvent(data._id);
+    await deleteEvent(data._id);
     eventStore.update(d => ({ ...d, events: d.events.filter(e => e._id !== data._id)}));
+  }
+
+  const removeParticipant = async () => {
+    await removeUserFromEvent(data._id, $loggedInUserStore._id);
+    data.participants = data.participants.filter(u => u._id !== $loggedInUserStore._id);
+    eventStore.update(d => ({ ...d, events: d.events.map(e => e._id === data._id ? data : e)}));
+  }
+
+  const addParticipant = async () => {
+    await addUserToEvent(data._id, $loggedInUserStore);
+    data.participants = [ ...data.participants, $loggedInUserStore ];
+    eventStore.update(d => ({ ...d, events: d.events.map(e => e._id === data._id ? data : e)}));
   }
 </script>
 
 <main>
   <div class="card">
+    {#if includeUser}
+      <span>🙋‍♂️ Participating</span>
+      <button on:click={removeParticipant}>✖️ Leave</button>
+    {:else}
+      <button on:click={addParticipant}>🎈 Join</button>
+    {/if}
     <button on:click={onDelete} class="delete-button">🗑️ Delete</button>
-    {data.name}
+    <div>{data.name}</div>
+    <div>Participants: <pre>{JSON.stringify(data.participants)}</pre></div>
   </div>
 </main>
 

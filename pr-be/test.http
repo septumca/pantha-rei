@@ -1,15 +1,15 @@
 # EVENTS
 
-###
+### Get all events
 GET http://localhost:7005/events HTTP/1.1
 
-###
-GET http://localhost:7005/events/c9f6305e-2ae1-41aa-9b1a-da651c2417fb HTTP/1.1
+### Get single event
+GET http://localhost:7005/events/08fe20d2-bc94-41ae-9651-bb857d791604 HTTP/1.1
 
 ### Not Found
 GET http://localhost:7005/events/11111111-2222-3333-4444-555555555555 HTTP/1.1
 
-###
+### Create event
 POST http://localhost:7005/events HTTP/1.1
 Content-Type: application/json
 
@@ -17,22 +17,37 @@ Content-Type: application/json
   "name": "REST-event"
 }
 
-###
+### Delete evet
 DELETE http://localhost:7005/events/c9f6305e-2ae1-41aa-9b1a-da651c2417fb HTTP/1.1
 
+### Add user
+POST http://localhost:7005/events/2308b730-9e5c-4a63-91a1-c6989f2cafa1/participants HTTP/1.1
+Content-Type: application/json
+
+{
+  "_id": "8478fc36-5bbb-410a-bc0f-20fe1e4daf3d",
+  "name": "WEB Filtrovic",
+  "dispositions": [
+    "video",
+    "cooking"
+  ]
+}
+
+### Remove user
+DELETE http://localhost:7005/events/2308b730-9e5c-4a63-91a1-c6989f2cafa1/participants/8478fc36-5bbb-410a-bc0f-20fe1e4daf3d HTTP/1.1
 
 # USERS
 
-###
+### Get all users
 GET http://localhost:7005/users HTTP/1.1
 
-###
+### Get single user
 GET http://localhost:7005/users/0ab8c67b-34ab-48c9-9ade-0da5975ea8ab HTTP/1.1
 
 ### Not Found
 GET http://localhost:7005/users/11111111-2222-3333-4444-555555555555 HTTP/1.1
 
-###
+### Update user
 PUT http://localhost:7005/users/0ab8c67b-34ab-48c9-9ade-0da5975ea8ab HTTP/1.1
 Content-Type: application/json
 
@@ -46,7 +61,7 @@ Content-Type: application/json
   ]
 }
 
-###
+### Create user
 POST http://localhost:7005/users HTTP/1.1
 Content-Type: application/json
 
@@ -55,7 +70,7 @@ Content-Type: application/json
   "dispositions": ["cooking", "audio", "video", "driving"]
 }
 
-###
+### Delete user
 DELETE http://localhost:7005/events/0ab8c67b-34ab-48c9-9ade-0da5975ea8ab HTTP/1.1
 
 

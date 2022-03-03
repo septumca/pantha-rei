@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { eventStore, refDataStore, userStore, loggedInUserStore } from "./utils/stores";
-  import Event from "./lib/Event/Event.svelte";
+  import { eventStore, refDataStore, userStore } from "./utils/stores";
   import NewEvent from "./lib/Event/NewEvent.svelte";
   import { getEvents, getUsers, getReferenceData } from "./utils/services";
   import NewUser from "./lib/User/NewUser.svelte";
@@ -11,6 +10,7 @@
   import Login from "./lib/Login/Login.svelte";
   import PrivateRoute from "./lib/GeneralComponents/PrivateRoute.svelte";
   import Home from "./lib/Home/Home.svelte";
+  import Events from "./lib/Event/Events.svelte";
 
   onMount(async () => {
     const fe: Promise<Array<EventData>> = getEvents();
@@ -41,11 +41,7 @@
         <Home />
       </PrivateRoute>
       <PrivateRoute path="/events">
-        <div class="container">
-          {#each $eventStore.events as e}
-            <Event data={e} />
-          {/each}
-        </div>
+        <Events />
         <Link to="/events/new">New event</Link>
       </PrivateRoute>
       <PrivateRoute path="/events/new">

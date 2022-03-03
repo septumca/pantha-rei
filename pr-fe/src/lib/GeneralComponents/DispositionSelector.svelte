@@ -37,7 +37,6 @@
           <div>❌</div>
         </button>
       </div>
-
     {/each}
   </div>
 </div>
