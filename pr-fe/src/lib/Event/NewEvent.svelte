@@ -2,6 +2,9 @@
   import { createEvent } from "../../utils/services";
   import { eventStore } from '../../utils/stores';
   import type { EventData } from "src/types/prtypes.type";
+  import { useFocus } from "svelte-navigator";
+
+  const registerFocus = useFocus();
 
   let name: string = "";
 
@@ -14,10 +17,9 @@
 
 <div>
   <div>
-    <input placeholder="Event name" bind:value={name} >
+    <input use:registerFocus placeholder="Event name" bind:value={name} >
   </div>
   <button on:click={onCreate} disabled={name === ""}>
     <div>🗓️✔️ Create new event</div>
   </button>
-
 </div>

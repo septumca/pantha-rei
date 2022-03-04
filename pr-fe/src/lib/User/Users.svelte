@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { eventStore } from '../../utils/stores';
-  import Event from "./Event.svelte";
+  import { userStore } from '../../utils/stores';
+  import User from "./User.svelte";
   import { useFocus } from "svelte-navigator";
 
   const registerFocus = useFocus();
 </script>
 
 <div use:registerFocus class="container">
-  {#each $eventStore.events as e}
-    <Event data={e} />
+  {#each $userStore.users as u}
+    <User data={u} />
   {/each}
 </div>
 
@@ -21,4 +21,4 @@
     column-gap: 16px;
     row-gap: 16px;
   }
-  </style>
+</style>

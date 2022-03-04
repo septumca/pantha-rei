@@ -1,11 +1,13 @@
 <script>
+  import { isUserLogged } from "../../utils/auth";
   import { useNavigate, useLocation } from "svelte-navigator";
-  import { loggedInUserStore } from "../../utils/stores";
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  $: if ($loggedInUserStore === null) {
+  const userLogged = isUserLogged();
+
+  $: if (userLogged === false) {
     navigate("/login", {
       state: { from: $location.pathname },
       replace: true,
@@ -13,6 +15,6 @@
   }
 </script>
 
-{#if $loggedInUserStore !== null}
+{#if userLogged}
   <slot />
 {/if}

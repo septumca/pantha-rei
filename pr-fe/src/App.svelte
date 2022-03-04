@@ -4,13 +4,14 @@
   import NewEvent from "./lib/Event/NewEvent.svelte";
   import { getEvents, getUsers, getReferenceData } from "./utils/services";
   import NewUser from "./lib/User/NewUser.svelte";
-  import User from "./lib/User/User.svelte";
   import type { EventData, ReferenceData, UserData } from "./types/prtypes.type";
   import { Router, Link, Route } from "svelte-navigator";
   import Login from "./lib/Login/Login.svelte";
   import PrivateRoute from "./lib/GeneralComponents/PrivateRoute.svelte";
   import Home from "./lib/Home/Home.svelte";
   import Events from "./lib/Event/Events.svelte";
+  import Logout from "./lib/Logout/Logout.svelte";
+  import Users from "./lib/User/Users.svelte";
 
   onMount(async () => {
     const fe: Promise<Array<EventData>> = getEvents();
@@ -27,37 +28,39 @@
 
 <main>
   <Router>
-    <nav>
-      <Link to="/">Home</Link>
-      <Link to="/events">Events</Link>
-      <Link to="/users">Users</Link>
-    </nav>
     <div>
       <Route path="login">
         <Login />
       </Route>
 
-      <PrivateRoute path="/">
-        <Home />
-      </PrivateRoute>
-      <PrivateRoute path="/events">
-        <Events />
-        <Link to="/events/new">New event</Link>
-      </PrivateRoute>
-      <PrivateRoute path="/events/new">
-        <NewEvent />
-      </PrivateRoute>
-      <PrivateRoute path="/users">
-        <div class="container">
-          {#each $userStore.users as u}
-            <User data={u} />
-          {/each}
+      <PrivateRoute path="/*">
+        <div>
+          <nav>
+            <Link to="/">Home</Link>
+            <Link to="/events">Events</Link>
+            <Link to="/users">Users</Link>
+          </nav>
+          <Logout />
         </div>
-        <Link to="/users/new">New user</Link>
+        <Route path="/">
+          <Home />
+        </Route>
+        <Route path="events">
+          <Events />
+          <Link to="events/new">New event</Link>
+        </Route>
+        <Route path="events/new">
+          <NewEvent />
+        </Route>
+        <Route path="users">
+          <Users />
+          <Link to="users/new">New user</Link>
+        </Route>
+        <Route path="users/new">
+          <NewUser />
+        </Route>
       </PrivateRoute>
-      <PrivateRoute path="/users/new">
-        <NewUser />
-      </PrivateRoute>
+
     </div>
   </Router>
 

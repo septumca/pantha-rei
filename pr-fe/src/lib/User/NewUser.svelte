@@ -3,6 +3,9 @@
   import { userStore } from '../../utils/stores';
   import type { UserData } from "src/types/prtypes.type";
   import DispositionSelector from "../GeneralComponents/DispositionSelector.svelte";
+  import { useFocus } from "svelte-navigator";
+
+  const registerFocus = useFocus();
 
   let name: string = "";
   let dispositions: Array<string> = [];
@@ -17,7 +20,7 @@
 
 <main>
   <div>
-    <input placeholder="User name" bind:value={name} >
+    <input use:registerFocus placeholder="User name" bind:value={name} >
   </div>
   <DispositionSelector bind:dispositions={dispositions} />
   <button on:click={onCreate} disabled={name === ""}>

@@ -1,12 +1,14 @@
 <script lang="ts">
-  import type { EventData } from "../../types/prtypes.type";
+  import type { EventData, UserData } from "../../types/prtypes.type";
+  import { getLoggedUser } from "../../utils/auth";
   import { addUserToEvent, removeUserFromEvent } from "../../utils/services";
   import { deleteEvent } from "../../utils/services";
-  import { eventStore, loggedInUserStore } from '../../utils/stores';
+  import { eventStore } from '../../utils/stores';
 
   export let data: EventData;
+  let user: UserData = getLoggedUser();
 
-  $: includeUser = $loggedInUserStore !== null && data.participants.some(d => d._id === $loggedInUserStore._id);
+  $: includeUser = data.participants.some(d => d._id === user._id);
 
   const onDelete = async () => {
     await deleteEvent(data._id);
@@ -14,14 +16,14 @@
   }
 
   const removeParticipant = async () => {
-    await removeUserFromEvent(data._id, $loggedInUserStore._id);
-    data.participants = data.participants.filter(u => u._id !== $loggedInUserStore._id);
+    await removeUserFromEvent(data._id, user._id);
+    data.participants = data.participants.filter(u => u._id !== user._id);
     eventStore.update(d => ({ ...d, events: d.events.map(e => e._id === data._id ? data : e)}));
   }
 
   const addParticipant = async () => {
-    await addUserToEvent(data._id, $loggedInUserStore);
-    data.participants = [ ...data.participants, $loggedInUserStore ];
+    await addUserToEvent(data._id, user);
+    data.participants = [ ...data.participants, user ];
     eventStore.update(d => ({ ...d, events: d.events.map(e => e._id === data._id ? data : e)}));
   }
 </script>

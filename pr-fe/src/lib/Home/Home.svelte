@@ -1,25 +1,28 @@
 <script lang="ts">
   import type { UserData } from 'src/types/prtypes.type';
-  import { loggedInUserStore } from '../../utils/stores';
   import { updateUser } from '../../utils/services';
   import DispositionSelector from '../GeneralComponents/DispositionSelector.svelte';
+  import { getLoggedUser, setLoggedUser } from '../../utils/auth';
+  import { useFocus } from "svelte-navigator";
 
-  let userData: UserData = $loggedInUserStore;
+  const registerFocus = useFocus();
+
+  let user: UserData = getLoggedUser();
 
   const onUpdate = async () => {
-    await updateUser(userData._id, userData);
-    loggedInUserStore.set({ ...userData });
+    await updateUser(user._id, user);
+    setLoggedUser(user);
   }
 </script>
 
 <main>
   <div>Name: </div>
   <div>
-    <input placeholder="User name" bind:value={userData.name} >
+    <input use:registerFocus placeholder="User name" bind:value={user.name} >
   </div>
   <div>Dispositions: </div>
-  <DispositionSelector bind:dispositions={userData.dispositions} />
+  <DispositionSelector bind:dispositions={user.dispositions} />
   <div>
-    <button on:click={onUpdate} disabled={userData.name === ""}>💾 Update</button>
+    <button on:click={onUpdate} disabled={user.name === ""}>💾 Update</button>
   </div>
 </main>

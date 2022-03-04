@@ -1,8 +1,11 @@
 <script lang="ts">
-import { useLocation, useNavigate } from "svelte-navigator";
-
-  import { userStore, loggedInUserStore } from "../../utils/stores";
+  import { setLoggedUser } from "../../utils/auth";
+  import { useLocation, useNavigate } from "svelte-navigator";
+  import { userStore } from "../../utils/stores";
   import PrSelect from "../GeneralComponents/PrSelect.svelte";
+  import { useFocus } from "svelte-navigator";
+
+  const registerFocus = useFocus();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,14 +19,15 @@ import { useLocation, useNavigate } from "svelte-navigator";
     if (u === null) {
       return;
     }
-    $loggedInUserStore = u;
+
+    setLoggedUser(u);
     const from = ($location.state && $location.state.from) || "/";
     navigate(from, { replace: true });
   }
 </script>
 
 <div>
-  <div>Login as</div>
+  <div use:registerFocus>Login as</div>
   <div>
     <PrSelect
       id="login-user-list"
