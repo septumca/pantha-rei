@@ -16,13 +16,17 @@
 </script>
 
 <main>
-  <div>Name: </div>
   <div>
-    <input use:registerFocus placeholder="User name" bind:value={user.name} >
+    Name: <input use:registerFocus placeholder="User name" bind:value={user.name} >
   </div>
-  <div>Dispositions: </div>
-  <DispositionSelector bind:dispositions={user.dispositions} />
+  <div>Dispositions: <DispositionSelector bind:dispositions={user.dispositions} /></div>
   <div>
     <button on:click={onUpdate} disabled={user.name === ""}>💾 Update</button>
   </div>
 </main>
+
+<style>
+  div {
+    margin-bottom: 8px;
+  }
+</style>

@@ -28,36 +28,47 @@
   }
 </script>
 
-<main>
-  <div class="card">
+<div class="card">
+  <div class="left-controls">
     {#if includeUser}
-      <span>🙋‍♂️ Participating</span>
-      <button on:click={removeParticipant}>✖️ Leave</button>
+      <div><span>🙋‍♂️ Participating</span></div>
+      <div><button on:click={removeParticipant}>✖️ Leave</button></div>
     {:else}
       <button on:click={addParticipant}>🎈 Join</button>
     {/if}
-    <button on:click={onDelete} class="delete-button">🗑️ Delete</button>
-    <div>{data.name}</div>
-    <div>Participants: <pre>{JSON.stringify(data.participants)}</pre></div>
   </div>
-</main>
+  <div class="right-controls"><button on:click={onDelete}>🗑️ Delete</button></div>
+  <div class="title">{data.name}</div>
+  <div class="content">Participants: {data.participants.map(p => p.name).join(', ') || "None"}</div>
+</div>
 
 <style>
-
-  .delete-button {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    display: flex;
-    cursor: pointer;
+  .left-controls {
+    grid-area: lc;
+  }
+  .title {
+    grid-area: tl;
+  }
+  .right-controls {
+    grid-area: rc;
+    text-align: right;
+  }
+  .content {
+    grid-area: ct;
   }
 
   .card {
-    position: relative;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     padding: 4px 8px;
     border-radius: 8px;
     border: 2px solid #3a3a3a;
+    display: grid;
+    gap: 4px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "tl tl"
+      "lc rc"
+      "ct ct"
   }
 </style>

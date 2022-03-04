@@ -14,27 +14,35 @@ import type { UserData } from "src/types/prtypes.type";
 
 <main>
   <div class="card">
-    <button on:click={onDelete} class="delete-button">🗑️ Delete</button>
-    <div>{data.name}</div>
-    <div>{data.dispositions.join(', ')}</div>
+    <div class="title">{data.name}</div>
+    <div class="right-controls"><button on:click={onDelete} class="delete-button">🗑️ Delete</button></div>
+    <div class="content">{data.dispositions.join(', ')}</div>
   </div>
 </main>
 
 <style>
-  .delete-button {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    display: flex;
-    cursor: pointer;
+  .title {
+    grid-area: tl;
+  }
+  .right-controls {
+    grid-area: lc;
+    text-align: right;
+  }
+  .content {
+    grid-area: ct;
   }
 
   .card {
-    position: relative;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     padding: 4px 8px;
     border-radius: 8px;
     border: 2px solid #3a3a3a;
+    display: grid;
+    gap: 4px;
+    grid-template-columns: 3fr 1fr;
+    grid-template-areas:
+      "tl lc"
+      "ct ct"
   }
 </style>

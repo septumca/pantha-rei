@@ -34,7 +34,7 @@
       </Route>
 
       <PrivateRoute path="/*">
-        <div>
+        <div class="navbar">
           <nav>
             <Link to="/">Home</Link>
             <Link to="/events">Events</Link>
@@ -47,17 +47,17 @@
         </Route>
         <Route path="events">
           <Events />
-          <Link to="events/new">New event</Link>
+          <Link to="new">New event</Link>
         </Route>
         <Route path="events/new">
           <NewEvent />
         </Route>
-        <Route path="users">
+        <Route path="users/*">
           <Users />
           <Link to="users/new">New user</Link>
-        </Route>
-        <Route path="users/new">
-          <NewUser />
+          <Route path="new">
+            <NewUser />
+          </Route>
         </Route>
       </PrivateRoute>
 
@@ -72,6 +72,12 @@
   :root {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .navbar {
+    border-bottom: 1px solid rgb(0, 134, 187);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
   }
 
   :global(input) {
@@ -102,12 +108,4 @@
     transition: background-color 0.3s;
   }
 
-  .container {
-    text-align: center;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    margin: 16px;
-    column-gap: 16px;
-    row-gap: 16px;
-  }
 </style>
