@@ -3,7 +3,8 @@
   import { getLoggedUser } from "../../utils/auth";
   import { addUserToEvent, removeUserFromEvent } from "../../utils/services";
   import { deleteEvent } from "../../utils/services";
-  import { eventStore } from '../../utils/stores';
+  import { removeEvent, updateEvent } from '../../utils/stores';
+  import EventRequirement from "./EventRequirement.svelte";
 
   export let data: EventData;
   let user: UserData = getLoggedUser();
@@ -12,19 +13,19 @@
 
   const onDelete = async () => {
     await deleteEvent(data._id);
-    eventStore.update(d => ({ ...d, events: d.events.filter(e => e._id !== data._id)}));
+    removeEvent(data._id);
   }
 
   const removeParticipant = async () => {
     await removeUserFromEvent(data._id, user._id);
     data.participants = data.participants.filter(u => u._id !== user._id);
-    eventStore.update(d => ({ ...d, events: d.events.map(e => e._id === data._id ? data : e)}));
+    updateEvent(data);
   }
 
   const addParticipant = async () => {
     await addUserToEvent(data._id, user);
     data.participants = [ ...data.participants, user ];
-    eventStore.update(d => ({ ...d, events: d.events.map(e => e._id === data._id ? data : e)}));
+    updateEvent(data);
   }
 </script>
 
@@ -39,7 +40,19 @@
   </div>
   <div class="right-controls"><button on:click={onDelete}>🗑️ Delete</button></div>
   <div class="title">{data.name}</div>
-  <div class="content">Participants: {data.participants.map(p => p.name).join(', ') || "None"}</div>
+  <div class="content">
+    <div>
+      Participants: {data.participants.length}
+    </div>
+    <div>
+      {data.description}
+    </div>
+    <div>
+      {#each data.requirements as d}
+        <EventRequirement eventId={data._id} data={d} />
+      {/each}
+    </div>
+  </div>
 </div>
 
 <style>
@@ -64,11 +77,12 @@
     border-radius: 8px;
     border: 2px solid #3a3a3a;
     display: grid;
-    gap: 4px;
+    row-gap: 8px;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "tl tl"
       "lc rc"
+      "ct ct"
       "ct ct"
   }
 </style>

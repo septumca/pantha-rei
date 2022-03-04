@@ -45,7 +45,7 @@
 <style>
   .remove-button {
     border-radius: 16px;
-    line-height: 17px;
+    line-height: 22px;
   }
 
   .disposition {

@@ -15,6 +15,5 @@ export const clearLoggedUser = () => {
 }
 
 export const isUserLogged = (): boolean => {
-  console.info('isUserLogged', localStorage.getItem(LOCALSTORAGE_USER), localStorage.getItem(LOCALSTORAGE_USER) !== null);
   return localStorage.getItem(LOCALSTORAGE_USER) !== null;
 }

@@ -41,8 +41,9 @@ const DELETE_OPTIONS: Options = {
   }
 }
 
-export const createEvent = async (name: string) => {
-  let r = await fetch(EVENT_API, { ...POST_OPTIONS, body: JSON.stringify({ name })});
+export const createEvent = async (name: string, description: string = "", requirements: Array<string> = []) => {
+  const payload = { name, description, requirements: requirements.map(d => ({ name: d }))};
+  let r = await fetch(EVENT_API, { ...POST_OPTIONS, body: JSON.stringify(payload) });
   return r.json();
 }
 
@@ -52,6 +53,16 @@ export const addUserToEvent = async (id: string, data: UserData) => {
 
 export const removeUserFromEvent = async (eventId: string, userId: string) => {
   await fetch(`${EVENT_API}/${eventId}/participants/${userId}`, DELETE_OPTIONS);
+}
+
+export const fullfillRequirement = async(id: string, requirementName: string, data: UserData) => {
+  const payload = { user_id: data._id, user_name: data.name, requirement_name: requirementName };
+  await fetch(`${EVENT_API}/${id}/fullfill`, { ...PUT_OPTIONS, body: JSON.stringify(payload) });
+}
+
+export const unfullfillRequirement = async(eventId: string, requirementName: string, userId: string) => {
+  const payload = { user_id: userId, requirement_name: requirementName };
+  await fetch(`${EVENT_API}/${eventId}/unfullfill`, { ...PUT_OPTIONS, body: JSON.stringify(payload) });
 }
 
 export const deleteEvent = async (id: string) => {

@@ -4,10 +4,22 @@ export type UserData = {
   dispositions: Array<string>
 }
 
+export type Fullfillment = {
+  _id: string,
+  name: string
+}
+
+export type Requirement = {
+  name: string,
+  fullfilled_by: Fullfillment | null,
+}
+
 export type EventData = {
   _id: string,
   name: string,
-  participants: Array<UserData>
+  description: string,
+  participants: Array<UserData>,
+  requirements: Array<Requirement>,
 }
 
 export type ReferenceData = {

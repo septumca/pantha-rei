@@ -28,6 +28,8 @@ async fn main() {
         .route("/events", post(event::create))
         .route("/events/:id", delete(event::delete))
         .route("/events/:id", get(event::read))
+        .route("/events/:id/fullfill", put(event::fullfill_requirement))
+        .route("/events/:id/unfullfill", put(event::unfullfill_requirement))
         .route("/events/:id/participants", post(event::add_user))
         .route("/events/:id/participants/:user_id", delete(event::remove_user))
         .route("/events", get(event::read_all))

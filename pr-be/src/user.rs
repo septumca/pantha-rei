@@ -46,7 +46,7 @@ pub async fn delete(Path(id): Path<String>) -> Result<(), error::PrError> {
 }
 
 pub async fn put(Path(id): Path<String>, Json(data): Json<UpdateUserData>) -> Result<(), error::PrError> {
-  Ok::<(), error::PrError>(utils::put::<UpdateUserData, User>(COLL_NAME, id, data).await?)
+  Ok::<(), error::PrError>(utils::put_by_id::<UpdateUserData, User>(COLL_NAME, id, data).await?)
 }
 
 pub async fn read(Path(id): Path<String>) -> Result<Json<User>, error::PrError> {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createUser } from "../../utils/services";
-  import { userStore } from '../../utils/stores';
+  import { addUser } from '../../utils/stores';
   import type { UserData } from "src/types/prtypes.type";
   import DispositionSelector from "../GeneralComponents/DispositionSelector.svelte";
   import { useFocus } from "svelte-navigator";
@@ -12,7 +12,7 @@
 
   const onCreate = async () => {
     let user: UserData = await createUser(name, dispositions);
-    userStore.update(d => ({ ...d, users: [...d.users, user] }));
+    addUser(user);
     name = "";
     dispositions = [];
   }

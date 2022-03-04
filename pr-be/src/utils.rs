@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize, de::DeserializeOwned};
-use mongodb::{bson::{doc, Uuid}, options::UpdateModifications};
+use mongodb::{bson::{doc, Uuid, Document}, options::UpdateModifications};
 use futures::stream::{StreamExt};
 
 use super::dbutils;
@@ -40,15 +40,22 @@ where T: Serialize + DeserializeOwned + Unpin + std::marker::Send + Sync
   Ok(entries)
 }
 
-pub async fn put<'de, D, T>(collection_name: &str, id: String, data: D) -> Result<(), PrError>
+pub async fn put<'de, D, T>(collection_name: &str, filter: Document, data: D) -> Result<(), PrError>
+where D: Serialize + Deserialize<'de> + Into<UpdateModifications>,
+      T: Serialize + DeserializeOwned + Unpin + std::marker::Send + Sync,
+{
+  let coll = dbutils::get_collection::<T>(collection_name).await?;
+  let _ = coll.update_one(filter, data, None).await?;
+
+  Ok(())
+}
+
+pub async fn put_by_id<'de, D, T>(collection_name: &str, id: String, data: D) -> Result<(), PrError>
 where D: Serialize + Deserialize<'de> + Into<UpdateModifications>,
       T: Serialize + DeserializeOwned + Unpin + std::marker::Send + Sync
 {
   let id = Uuid::parse_str(id)?;
-  let coll = dbutils::get_collection::<T>(collection_name).await?;
-  let _ = coll.update_one(doc! { "_id": id }, data, None).await?;
-
-  Ok(())
+  put::<D, T>(collection_name, doc! { "_id": id }, data).await
 }
 
 

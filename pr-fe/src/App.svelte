@@ -37,8 +37,8 @@
         <div class="navbar">
           <nav>
             <Link to="/">Home</Link>
-            <Link to="/events">Events</Link>
-            <Link to="/users">Users</Link>
+            <Link to="events">Events</Link>
+            <Link to="users">Users</Link>
           </nav>
           <Logout />
         </div>
@@ -54,10 +54,10 @@
         </Route>
         <Route path="users/*">
           <Users />
-          <Link to="users/new">New user</Link>
-          <Route path="new">
-            <NewUser />
-          </Route>
+          <Link to="new">New user</Link>
+        </Route>
+        <Route path="users/new">
+          <NewUser />
         </Route>
       </PrivateRoute>
 
@@ -69,9 +69,10 @@
 </main>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
   :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
 
   .navbar {
@@ -89,6 +90,8 @@
   }
 
   :global(button) {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
     cursor: pointer;
     background-color: rgb(0, 134, 187);
     transition: background-color 0.3s;

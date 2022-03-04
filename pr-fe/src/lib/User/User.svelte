@@ -2,13 +2,13 @@
 import type { UserData } from "src/types/prtypes.type";
 
   import { deleteUser } from "../../utils/services";
-  import { userStore } from "../../utils/stores";
+  import { removeUser } from "../../utils/stores";
 
   export let data: UserData;
 
   const onDelete = async () => {
     const _r = await deleteUser(data._id);
-    userStore.update(d => ({ ...d, users: d.users.filter(e => e._id !== data._id)}));
+    removeUser(data._id);
   }
 </script>
 
