@@ -9,7 +9,7 @@ use crate::{error::{self}, utils, user::{User}, dbutils};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FullFillment {
-  _id: String,
+  _id: Uuid,
   name: String
 }
 
@@ -78,7 +78,7 @@ impl From<RemoveUserFromEventData> for UpdateModifications {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FullfillRequirement {
   requirement_name: String,
-  user_id: String,
+  user_id: Uuid,
   user_name: String
 }
 
@@ -96,7 +96,7 @@ pub struct UnfullfillRequirement {
 
 impl From<UnfullfillRequirement> for UpdateModifications {
   fn from(_d: UnfullfillRequirement) -> Self {
-    UpdateModifications::Document(doc! { "$set": { "requirements.$.fullfilled_by": null }})
+    UpdateModifications::Document(doc! { "$set": { "requirements.fullfilled_by": null }})
   }
 }
 
@@ -120,7 +120,8 @@ pub async fn fullfill_requirement(Path(id): Path<String>, Json(data): Json<Fullf
 
 pub async fn unfullfill_requirement(Path(id): Path<String>, Json(data): Json<UnfullfillRequirement>) -> Result<(), error::PrError> {
   let id = Uuid::parse_str(id)?;
-  let filter = doc ! { "_id": id, "requirements.name": data.requirement_name.clone(), "requirements.fullfilled_by._id": data.user_id.clone() };
+  let user_id = Uuid::parse_str(&data.user_id)?;
+  let filter = doc ! { "_id": id, "requirements.name": data.requirement_name.clone(), "requirements.fullfilled_by._id": user_id };
   Ok::<(), error::PrError>(utils::put::<UnfullfillRequirement, Event>(COLL_NAME, filter, data).await?)
 }
 
@@ -132,16 +133,11 @@ pub async fn remove_user(Path((id, uid)): Path<(String, String)>) -> Result<(), 
   let id = Uuid::parse_str(id)?;
   let uid = Uuid::parse_str(uid)?;
   let data = RemoveUserFromEventData { _id: uid };
-  let unfullfill_data = doc! { "$set": { "requirements.fullfilled_by": null }};
+  let unfullfill_data = doc! { "$set": { "requirements.$[].fullfilled_by": null }};
 
   let coll = dbutils::get_collection::<Event>(COLL_NAME).await?;
   let _ = coll.update_one(doc ! { "_id": id.clone() }, data, None).await?;
-
-  //TODO: fix unfullfilling requirements
-  tracing::info!("Query document: _id: {:?}, requirements.fullfilled_by._id: {:?}", id,  uid);
-  let u2 = coll.update_many(doc ! { "_id": id, "requirements.fullfilled_by._id": uid }, unfullfill_data, None).await?;
-  tracing::info!("Unfullfill requirements: {:?}", u2);
-
+  let _ = coll.update_many(doc ! { "_id": id, "requirements.fullfilled_by._id": uid }, unfullfill_data, None).await?;
 
   Ok::<(), error::PrError>(())
 }

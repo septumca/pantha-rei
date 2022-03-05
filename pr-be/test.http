@@ -48,6 +48,16 @@ Content-Type: application/json
   "requirement_name": "video"
 }
 
+### Add fullfillment for participant
+PUT http://localhost:7005/events/150e4b0a-5a53-43a3-8e18-97e67065ea92/fullfill HTTP/1.1
+Content-Type: application/json
+
+{
+  "user_id": "8478fc36-5bbb-410a-bc0f-20fe1e4daf3d",
+  "user_name": "WEB Filtrovic",
+  "requirement_name": "cooking"
+}
+
 ### Remove fullfillment for participant
 PUT http://localhost:7005/events/150e4b0a-5a53-43a3-8e18-97e67065ea92/unfullfill HTTP/1.1
 Content-Type: application/json
