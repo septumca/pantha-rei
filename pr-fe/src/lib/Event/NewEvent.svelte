@@ -27,7 +27,7 @@
     <textarea id="event-description" name="event-description" placeholder="Description of an event" rows="4" cols="40" bind:value={description} />
   </div>
   <div>
-    <DispositionSelector dispositions={requirements} />
+    <DispositionSelector bind:dispositions={requirements} />
   </div>
   <button on:click={onCreate} disabled={name === ""}>
     <div>🗓️✔️ Create new event</div>

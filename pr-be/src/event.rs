@@ -136,7 +136,7 @@ pub async fn remove_user(Path((id, uid)): Path<(String, String)>) -> Result<(), 
   let unfullfill_data = doc! { "$set": { "requirements.$[].fullfilled_by": null }};
 
   let coll = dbutils::get_collection::<Event>(COLL_NAME).await?;
-  let _ = coll.update_one(doc ! { "_id": id.clone() }, data, None).await?;
+  let _ = coll.update_one(doc ! { "_id": id }, data, None).await?;
   let _ = coll.update_many(doc ! { "_id": id, "requirements.fullfilled_by._id": uid }, unfullfill_data, None).await?;
 
   Ok::<(), error::PrError>(())
