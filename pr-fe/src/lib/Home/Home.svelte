@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { UserData } from 'src/types/prtypes.type';
+  import type { UserData } from '../../types/prtypes.type';
   import { updateUser } from '../../utils/services';
   import DispositionSelector from '../GeneralComponents/DispositionSelector.svelte';
   import { getLoggedUser, setLoggedUser } from '../../utils/auth';

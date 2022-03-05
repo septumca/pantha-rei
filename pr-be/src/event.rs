@@ -96,7 +96,7 @@ pub struct UnfullfillRequirement {
 
 impl From<UnfullfillRequirement> for UpdateModifications {
   fn from(_d: UnfullfillRequirement) -> Self {
-    UpdateModifications::Document(doc! { "$set": { "requirements.fullfilled_by": null }})
+    UpdateModifications::Document(doc! { "$set": { "requirements.$.fullfilled_by": null }})
   }
 }
 

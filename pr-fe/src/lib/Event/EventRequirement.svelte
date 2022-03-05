@@ -7,6 +7,7 @@ import { setFullfillmentToEvent } from "../../utils/stores";
 
   export let data: Requirement;
   export let eventId: string;
+  export let joinable: boolean = false;
   let user: UserData = getLoggedUser();
 
   $: hasBeenFullfilled = data.fullfilled_by !== null;
@@ -36,7 +37,7 @@ import { setFullfillmentToEvent } from "../../utils/stores";
         <button on:click={unfullFill}>🛑 Sing off</button>
       {/if}
     </span>
-  {:else if canBeAssigned}
+  {:else if canBeAssigned && joinable}
     <button on:click={fullFill}>💡 Sing up</button>
   {/if}
 </div>

@@ -30,8 +30,22 @@ export const removeEvent = (eventId: string) => {
   eventStore.update(d => ({ ...d, events: d.events.filter(e => e._id !== eventId)}));
 }
 
-export const updateEvent = (event: EventData) => {
-  eventStore.update(d => ({ ...d, events: d.events.map(e => e._id === event._id ? event : e)}));
+export const addUserToEventStore = (eventId: string, user: UserData) => {
+  eventStore.update(d => ({ ...d, events: d.events.map(e => e._id === eventId ? {
+    ...e,
+    participants: [...e.participants, user],
+  } : e)}))
+}
+
+export const removeUserFromEventStore = (eventId: string, userId: string) => {
+  console.info(eventStore);
+  eventStore.update(d => ({ ...d, events: d.events.map(e => e._id === eventId ? {
+    ...e,
+    participants: e.participants.filter(u => u._id !== userId),
+    requirements: e.requirements.map(r => {
+      return r.fullfilled_by !== null && r.fullfilled_by._id === userId ? { ...r, fullfilled_by: null } : r
+    })
+  } : e)}));
 }
 
 export const addUser = (user: UserData) => {

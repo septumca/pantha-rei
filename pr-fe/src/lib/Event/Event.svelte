@@ -3,13 +3,13 @@
   import { getLoggedUser } from "../../utils/auth";
   import { addUserToEvent, removeUserFromEvent } from "../../utils/services";
   import { deleteEvent } from "../../utils/services";
-  import { removeEvent, updateEvent } from '../../utils/stores';
+  import { addUserToEventStore, removeEvent, removeUserFromEventStore } from '../../utils/stores';
   import EventRequirement from "./EventRequirement.svelte";
 
   export let data: EventData;
   let user: UserData = getLoggedUser();
 
-  $: includeUser = data.participants.some(d => d._id === user._id);
+  $: isParticipating = data.participants.some(d => d._id === user._id);
 
   const onDelete = async () => {
     await deleteEvent(data._id);
@@ -18,20 +18,18 @@
 
   const removeParticipant = async () => {
     await removeUserFromEvent(data._id, user._id);
-    data.participants = data.participants.filter(u => u._id !== user._id);
-    updateEvent(data);
+    removeUserFromEventStore(data._id, user._id);
   }
 
   const addParticipant = async () => {
     await addUserToEvent(data._id, user);
-    data.participants = [ ...data.participants, user ];
-    updateEvent(data);
+    addUserToEventStore(data._id, user);
   }
 </script>
 
 <div class="card">
   <div class="left-controls">
-    {#if includeUser}
+    {#if isParticipating}
       <div><span>🙋‍♂️ Participating</span></div>
       <div><button on:click={removeParticipant}>✖️ Leave</button></div>
     {:else}
@@ -49,7 +47,7 @@
     </div>
     <div>
       {#each data.requirements as d}
-        <EventRequirement eventId={data._id} data={d} />
+        <EventRequirement eventId={data._id} joinable={isParticipating} data={d} />
       {/each}
     </div>
   </div>
