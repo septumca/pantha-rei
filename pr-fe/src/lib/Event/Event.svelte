@@ -9,6 +9,7 @@
   export let data: EventData;
   let user: UserData = getLoggedUser();
 
+  $: isMyEvent = user._id === data.creator._id;
   $: isParticipating = data.participants.some(d => d._id === user._id);
 
   const onDelete = async () => {
@@ -29,8 +30,13 @@
 
 <div class="card">
   <div class="left-controls">
+    {#if isMyEvent}
+      <div>🔰 My event</div>
+    {:else}
+      <div>🙍‍♂️ {data.creator.name}</div>
+    {/if}
     {#if isParticipating}
-      <div><span>🙋‍♂️ Participating</span></div>
+      <div>🙋‍♂️ Participating</div>
       <div><button on:click={removeParticipant}>✖️ Leave</button></div>
     {:else}
       <button on:click={addParticipant}>🎈 Join</button>

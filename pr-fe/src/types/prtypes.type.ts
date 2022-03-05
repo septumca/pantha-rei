@@ -16,6 +16,7 @@ export type Requirement = {
 
 export type EventData = {
   _id: string,
+  creator: UserData,
   name: string,
   description: string,
   participants: Array<UserData>,

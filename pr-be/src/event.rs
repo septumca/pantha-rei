@@ -23,6 +23,7 @@ pub type Requirements = Vec<Requirement>;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Event {
   _id: Uuid,
+  creator: User,
   name: String,
   participants: Vec<User>,
   description: String,
@@ -32,6 +33,7 @@ pub struct Event {
 #[derive(Deserialize)]
 pub struct CreateEventData {
   name: String,
+  creator: User,
   description: Option<String>,
   requirements: Option<Requirements>,
 }
@@ -48,6 +50,7 @@ impl From<CreateEventData> for Event {
     let requirements = ed.requirements.or_else(|| Some(Vec::<Requirement>::new())).unwrap();
     Event {
       _id: Uuid::new(),
+      creator: ed.creator,
       name: ed.name,
       description,
       participants: vec![],

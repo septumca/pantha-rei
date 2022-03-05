@@ -41,8 +41,8 @@ const DELETE_OPTIONS: Options = {
   }
 }
 
-export const createEvent = async (name: string, description: string = "", requirements: Array<string> = []) => {
-  const payload = { name, description, requirements: requirements.map(d => ({ name: d }))};
+export const createEvent = async (name: string, creator: UserData, description: string = "", requirements: Array<string> = []) => {
+  const payload = { name, description, requirements: requirements.map(d => ({ name: d })), creator };
   let r = await fetch(EVENT_API, { ...POST_OPTIONS, body: JSON.stringify(payload) });
   return r.json();
 }
